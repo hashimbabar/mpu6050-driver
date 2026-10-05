@@ -1,0 +1,20 @@
+{
+  "name": "mpu6050-driver",
+  "version": "1.0.0",
+  "description": "Small MPU-6050 driver written from the register map. Platform-independent: I2C goes through three function pointers you provide.",
+  "keywords": "mpu6050, imu, accelerometer, gyroscope, i2c",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hashimbabar/mpu6050-driver"
+  },
+  "frameworks": "*",
+  "platforms": "*",
+  "build": {
+    "srcDir": "src",
+    "includeDir": "include"
+  },
+  "export": {
+    "exclude": ["test", "examples/linux_i2cdev", ".github"]
+  }
+}
