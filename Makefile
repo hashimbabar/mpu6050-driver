@@ -1,13 +1,14 @@
 # mpu6050-driver
 #   make test           build and run the unit tests on the PC
 #   make example-linux  build the Raspberry Pi / Linux i2c-dev example
+#   make cross          compile the driver for a Cortex-M4 (needs arm-none-eabi-gcc)
 
 CC      ?= cc
 CFLAGS  ?= -std=c11 -Wall -Wextra -Werror -O1 -g
 SAN     ?= -fsanitize=address,undefined
 BUILD   := build
 
-.PHONY: test example-linux clean
+.PHONY: test example-linux cross clean
 
 test: $(BUILD)/test_mpu6050
 	./$(BUILD)/test_mpu6050
@@ -20,6 +21,11 @@ example-linux: $(BUILD)/mpu6050_linux
 
 $(BUILD)/mpu6050_linux: src/mpu6050.c examples/linux_i2cdev/main.c include/*.h | $(BUILD)
 	$(CC) -std=gnu11 -Wall -Wextra -Werror -O2 -Iinclude src/mpu6050.c examples/linux_i2cdev/main.c -o $@
+
+cross: | $(BUILD)
+	arm-none-eabi-gcc -std=c11 -Wall -Wextra -Werror -Os -mcpu=cortex-m4 -mthumb \
+		-Iinclude -c src/mpu6050.c -o $(BUILD)/mpu6050_cm4.o
+	arm-none-eabi-size $(BUILD)/mpu6050_cm4.o
 
 $(BUILD):
 	mkdir -p $@
